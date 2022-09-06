@@ -43,21 +43,69 @@ function prepareObjects() {
     student.firstName =
       splitName[0].substring(0, 1).toUpperCase() + splitName[0].substring(1);
 
+    console.log(student.firstName);
+
     //Middlename
+    student.middleName =
+      name
+        .substring(name.indexOf(" "), name.lastIndexOf(" "))
+        .trim()
+        .substring(0, 1)
+        .toUpperCase() +
+      name
+        .substring(name.indexOf(" "), name.lastIndexOf(" "))
+        .trim()
+        .substring(1);
+
+    console.log(student.middleName);
 
     //Lastname
-    // student.lastName = splitName.lastIndexOf[]
+    const lastSpace = jsonObject.fullname.lastIndexOf(" ");
+    let lastName = name.substring(lastSpace).trim();
+    student.lastName =
+      lastName.substring(0, 1).toUpperCase() + lastName.substring(1);
 
-    // let firstLetter = name.substring(0, 1).toUpperCase();
-    // let restOfName = name.substring(1).toLowerCase();
-    // student.firstName = firstLetter + restOfName;
+    // if (name.includes == "-") {
+    //   student.lastName = name.lastIndexOf("-" + 1).toUpperCase();
+    // }
 
-    console.log(student.firstName);
+    //Nickname
+
+    if (name.includes(`"`)) {
+      let nickName = name
+        .substring(name.indexOf(`"`) + 1, name.lastIndexOf(`"`))
+        .toUpperCase();
+
+      student.nickName = nickName[0] + nickName.substring(1).toLowerCase();
+
+      student.middleName = "";
+    }
+
+    console.log(student.nickName);
+
+    //Gender
+    let gender = jsonObject.gender.trim().toLowerCase();
+    student.gender = gender.substring(0, 1).toUpperCase() + gender.substring(1);
+
+    //House
+    let house = jsonObject.house.trim().toLowerCase();
+    student.house = house.substring(0, 1).toUpperCase() + house.substring(1);
+    console.log(student.house);
+
     data.studentObjects.push(student);
 
-    if (name[0] == " ") {
-      name.shift();
+    //Image
+    student.image =
+      student.lastName.toLowerCase() +
+      "_" +
+      splitName[0].substring(0, 1).toLowerCase();
+
+    if (student.lastName == "Patil") {
+      student.image =
+        student.lastName.toLowerCase() + "_" + splitName[0].toLowerCase();
     }
+
+    console.log(student.image);
   });
 
   displayList();
@@ -66,16 +114,31 @@ function prepareObjects() {
 function displayList() {
   const studentList = document.querySelector("#list");
 
-  // document.querySelector("#list tbody").innerHTML = "";
-
   data.studentObjects.forEach((student) => {
     const template = document.querySelector("#student");
     let klon = template.cloneNode(true).content;
 
-    // let listElement = clone.querySelector("li");
     klon.querySelector(
       ".firstName"
     ).textContent = `FIRSTNAME: ${student.firstName}`;
+
+    klon.querySelector(
+      ".middleName"
+    ).textContent = `MIDDLENAME: ${student.middleName}`;
+
+    klon.querySelector(
+      ".lastName"
+    ).textContent = `LASTNAME: ${student.lastName}`;
+
+    klon.querySelector(
+      ".nickName"
+    ).textContent = `NICKNAME: ${student.nickName}`;
+
+    klon.querySelector(".gender").textContent = `GENDER: ${student.gender}`;
+
+    klon.querySelector(".house").textContent = `HOUSE: ${student.house}`;
+
+    klon.querySelector(".image").src = `/images/${student.image}.png`;
 
     studentList.appendChild(klon);
   });

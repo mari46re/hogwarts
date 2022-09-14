@@ -318,10 +318,43 @@ function displayList(studentObjects) {
 
     klon.querySelector(".image").src = `/images/${student.image}.png`;
 
-    if (student.house == "Griffyndor") {
-      template.style.backgroundColor = "red";
-    }
-
+    klon
+      .querySelector("li")
+      .addEventListener("click", () => showDetails(student));
     studentList.appendChild(klon);
   });
+
+  function showDetails(student) {
+    console.log("clicked", student);
+
+    const popup = document.querySelector("#popup");
+    popup.style.display = "block";
+
+    popup.querySelector(
+      ".firstName"
+    ).textContent = `FIRSTNAME: ${student.firstName}`;
+
+    popup.querySelector(
+      ".middleName"
+    ).textContent = `MIDDLENAME: ${student.middleName}`;
+
+    popup.querySelector(
+      ".lastName"
+    ).textContent = `LASTNAME: ${student.lastName}`;
+
+    popup.querySelector(
+      ".nickName"
+    ).textContent = `NICKNAME: ${student.nickName}`;
+
+    popup.querySelector(".gender").textContent = `GENDER: ${student.gender}`;
+
+    popup.querySelector(".house").textContent = `HOUSE: ${student.house}`;
+
+    // popup.querySelector(".image").src = `/images/${student.image}.png`;
+
+    document
+      .querySelector("#luk")
+      .addEventListener("click", () => (popup.style.display = "none"));
+    popup.addEventListener("click", () => (popup.style.display = "none"));
+  }
 }

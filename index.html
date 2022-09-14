@@ -4,13 +4,61 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hogwarts</title>
+    <link rel="stylesheet" href="styles.css" />
+    <title>CLEANING HOGWARTS DATA</title>
   </head>
   <body>
     <main>
-      <h1>CLEANING HOGWARTS DATA</h1>
-
-      <ul id="list"></ul>
+      <h1>HOGWARTS STUDENTLIST</h1>
+      <div class="list-grid">
+        <div class="buttons">
+          <h2 class="filter">FILTER:</h2>
+          <button class="filter" data-action="filter" data-filter="all">
+            ALL
+          </button>
+          <button
+            class="gryffindor-filter"
+            data-action="filter"
+            data-filter="gryffindor"
+          >
+            GRIFFYNDOR
+          </button>
+          <button
+            class="ravenclaw-filter"
+            data-action="filter"
+            data-filter="ravenclaw"
+          >
+            RAVENCLAW
+          </button>
+          <button
+            class="hufflepuff-filter"
+            data-action="filter"
+            data-filter="hufflepuff"
+          >
+            HUFFLEPUFF
+          </button>
+          <button
+            class="slytherin-filter"
+            data-action="filter"
+            data-filter="slytherin"
+          >
+            SLYTHERIN
+          </button>
+          <h2 class="sort">SORT:</h2>
+          <div class="sorter">
+            <select name="sortingList" id="sortingList">
+              <option>SORT HERE</option>
+              <option value="firstnamea-z">Firstname A-Z</option>
+              <option value="firstnamez-a">Firstname Z-A</option>
+              <option value="lastnamea-z">Lastname A-Z</option>
+              <option value="lastnamez-a">Lastname Z-A</option>
+              <option value="housea-z">House A-Z</option>
+              <option value="housez-a">House Z-A</option>
+            </select>
+          </div>
+        </div>
+        <ul id="list"></ul>
+      </div>
     </main>
 
     <script src="script.js"></script>
@@ -18,13 +66,13 @@
 
   <template id="student">
     <li>
+      <img class="image" src="" alt="" />
       <p class="firstName"></p>
       <p class="middleName"></p>
       <p class="lastName"></p>
       <p class="nickName">NICKNAME:</p>
       <p class="gender"></p>
       <p class="house">HOUSE</p>
-      <img class="image" src="" alt="" />
     </li>
   </template>
 </html>

@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://use.typekit.net/pcx7wbs.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fontdiner+Swanky&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
     <title>CLEANING HOGWARTS DATA</title>
   </head>
@@ -13,16 +18,44 @@
         <article>
           <div class="luk-container">
           <div id="luk">&#x2715</div></div>
-  
-    <p class="firstName"></p>
-    <p class="middleName"></p>
-    <p class="lastName"></p>
-    <p class="nickName">NICKNAME:</p>
-    <p class="gender"></p>
-    <p class="house">HOUSE</p>
-      </article>
+          <div class="popup-grid">
+            <!-- Pop-up'en indeholder resten af oplysningerne om den valgte elev -->
+            <div class="img-container"><img class="image" src="" alt="" />
+            <h2 class="fullName"></h2></div>
+            <div class="info">
+              <div class="category-flex">
+                <p class="category">Firstname:</p>
+                <p class="firstName"></p>
+              </div>
+              <div class="category-flex">
+                <p class="category">Middlename:</p>
+                <p class="middleName"></p>
+              </div>
+              <div class="category-flex">
+                <p class="category">Nickname:</p>
+                <p class="nickName"></p>
+              </div>
+              <div class="category-flex">
+                <p class="category">Lastname:</p>
+                <p class="lastName"></p>
+              </div>
+              <div class="category-flex">
+                <p class="category">Gender:</p> 
+                <p class="gender"></p>
+              </div>
+              <div class="category-flex">
+                <p class="category">House:</p>
+                 <p class="house"></p>
+              </div>
+              <div class="category-flex">
+                <p class="category">Blood-status:</p>
+                 <p class="blood"></p>
+              </div>
+            </div>
+          </div>
+        </article>
       </aside>
-      <h1>HOGWARTS STUDENTLIST</h1>
+      <h1>Hogwarts Studentlist</h1>
       <div class="list-grid">
         <div class="buttons">
           <h2 class="filter">FILTER:</h2>
@@ -79,13 +112,14 @@
 
   <template id="student">
     <li>
+      <!-- Jeg vil kun vise billede og navn, og gemme resten i popup  -->
       <img class="image" src="" alt="" />
-      <p class="firstName"></p>
-      <p class="middleName"></p>
+      <h3 class="firstName"></h3>
+      <!-- <p class="middleName"></p>
       <p class="lastName"></p>
-      <p class="nickName">NICKNAME:</p>
-      <p class="gender"></p>
-      <p class="house">HOUSE</p>
+      <p class="nickName"></p>
+      <p class="gender"></p> -->
+      <p class="house"></p>
     </li>
   </template>
 </html>

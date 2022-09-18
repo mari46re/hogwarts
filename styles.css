@@ -4,11 +4,41 @@
   padding: 0;
 }
 
+body {
+  background-color: rgb(251, 248, 233);
+}
+
 h1 {
   text-align: center;
   margin: 2rem;
+  font-family: "Fontdiner Swanky", cursive;
 }
 
+h1,
+h2,
+h3 {
+  color: #372e29;
+}
+
+h2,
+h3,
+select,
+button {
+  font-family: obliqua, sans-serif;
+
+  font-weight: 700;
+
+  font-style: normal;
+}
+
+p,
+li {
+  font-family: obliqua, sans-serif;
+
+  font-weight: 400;
+
+  font-style: normal;
+}
 .list-grid {
   display: grid;
   grid-template-columns: 1fr 3fr;
@@ -20,17 +50,108 @@ h1 {
 }
 
 li {
-  /* margin: 1rem; */
   padding: 1rem;
-  box-shadow: 5px 5px 10px rgb(108, 55, 65);
+  background-color: rgba(255, 255, 255, 0.706);
+  box-shadow: 5px 5px 10px rgba(105, 66, 21, 0.408);
   list-style: none;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
+li .image {
+  margin-top: 1em;
+}
+
+li .firstName {
+  margin-top: 1em;
+}
+
+li .house {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+/***Teksten i drop-down-menuen skal centreres***/
 select {
   text-align: center;
 }
 
+#popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(65, 41, 13, 0.864);
+  z-index: 100;
+}
+
+aside article {
+  background-color: rgb(251, 248, 233);
+  width: 60%;
+  height: 60%;
+  margin: 4em auto;
+  border-radius: 3px;
+  position: relative;
+}
+
+.img-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#luk {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 1rem;
+}
+
+#popup article h2 {
+  margin: 1em;
+}
+
+button,
+select {
+  cursor: pointer;
+  border: 1px solid rgb(255, 255, 255);
+  box-shadow: 3px 6px 10px rgba(105, 66, 21, 0.408);
+  border-radius: 3px;
+}
+
+.slytherin-filter {
+  background-color: #1a472a;
+  color: white;
+}
+.gryffindor-filter {
+  background-color: #740001;
+  color: white;
+}
+.ravenclaw-filter {
+  background-color: #0e1a40;
+  color: white;
+}
+.hufflepuff-filter {
+  background-color: #ecb939;
+  color: white;
+}
+
+.category {
+  font-weight: bold;
+}
+
+.category-flex {
+  display: flex;
+  justify-content: space-between;
+}
+
 @media (min-width: 700px) {
+  h1 {
+    font-size: 3em;
+  }
   .list-grid {
     margin-left: 15%;
     margin-right: 15%;
@@ -50,25 +171,26 @@ select {
   .sort {
     margin-top: 2rem;
   }
-}
 
-#popup {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  background-color: rgba(57, 1, 100, 0.756);
-  z-index: 100;
-}
+  .popup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 90%;
+  }
+  .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 40%;
+    margin-left: 10%;
+  }
+  .img-container img {
+    height: 160px;
+  }
 
-aside article {
-  background-color: rgb(230, 252, 255);
-  width: 60%;
-  height: 60%;
-  margin: 4em auto;
-  border-radius: 3px;
+  .category-flex p {
+    margin-top: 0.5rem;
+  }
 }
 
 @media (max-width: 700px) {
@@ -94,5 +216,14 @@ aside article {
 
   .sort {
     margin-top: 1rem;
+  }
+
+  #popup article {
+    padding: 1rem;
+    border: 1px solid rgb(255, 255, 255);
+  }
+
+  #popup article .image {
+    margin-top: 2em;
   }
 }

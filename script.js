@@ -1,9 +1,9 @@
 "use strict";
 
 const url = "https://petlatkea.dk/2021/hogwarts/students.json";
-const studentList = {};
+const bloodUrl = "https://petlatkea.dk/2021/hogwarts/families.json";
 
-// const data = {};
+const studentList = {};
 
 const Student = {
   firstName: "",
@@ -12,15 +12,18 @@ const Student = {
   nickName: "",
   image: "",
   house: "",
+  blood: "",
+  prefect: false,
+  expelled: false,
 };
 
 let allStudents = [];
+
 let filter;
 let filteredStudents = [];
-
 let filterButtons;
 
-let sortThis = "sorting";
+let sortThis;
 
 window.addEventListener("DOMContentLoaded", init);
 
@@ -32,6 +35,7 @@ async function init() {
     filterButton.addEventListener("click", filterButtonClicked);
   });
 
+  //Onchange registrerer en forandring, der aktiverer en funktion. I dette tilfælde sortering
   document.querySelector("#sortingList").onchange = function () {
     selectedSorting(this.value);
   };
@@ -40,7 +44,7 @@ async function init() {
 }
 
 function filterButtonClicked(filterButton) {
-  console.log("filterClicked right here ");
+  console.log("filter-button clicked");
 
   filter = filterButton.target.dataset.filter;
 
@@ -50,39 +54,31 @@ function filterButtonClicked(filterButton) {
 }
 
 function isSlytherin(student) {
-  console.log("ifStudentSlytherin");
   if (student.house === "Slytherin") {
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 function isHufflepuff(student) {
-  console.log("ifStudentHufflepuff");
   if (student.house === "Hufflepuff") {
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 function isGryffindor(student) {
-  console.log("ifStudentGryffindor");
   if (student.house === "Gryffindor") {
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 function isRavenclaw(student) {
-  console.log("ifStudentRavenclaw");
   if (student.house === "Ravenclaw") {
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 function ifStudentAll(student) {
@@ -95,7 +91,7 @@ function ifStudentAll(student) {
 }
 
 function filterStudents() {
-  console.log("Filtering My Students by: ", filter);
+  console.log("Filtering students from this house:", filter);
 
   filteredStudents = [];
 
@@ -116,13 +112,12 @@ function filterStudents() {
 
 function selectedSorting(event) {
   sortThis = event;
-  console.log(`Use this ${sortThis}`);
+  // console.log(`Use this ${sortThis}`);
   buildList();
 }
 
 function sortList(sortedList) {
   //Calls a matching function
-
   if (sortThis === "firstnamea-z") {
     sortedList = sortedList.sort(sortThisFirstnameAZ);
   } else if (sortThis === "firstnamez-a") {
@@ -140,7 +135,7 @@ function sortList(sortedList) {
   return sortedList;
 }
 
-//sorts by firstName a-z
+//FirstName from a-z
 function sortThisFirstnameAZ(firstnameA, firstnameB) {
   if (firstnameA.firstName < firstnameB.firstName) {
     return -1;
@@ -149,7 +144,7 @@ function sortThisFirstnameAZ(firstnameA, firstnameB) {
   }
 }
 
-//sorts by firstName z-a
+//FirstName from z-a
 function sortThisFirstnameZA(firstnameA, firstnameB) {
   if (firstnameA.firstName < firstnameB.firstName) {
     return 1;
@@ -158,7 +153,7 @@ function sortThisFirstnameZA(firstnameA, firstnameB) {
   }
 }
 
-//sorts by lastName a-z
+//LastName from a-z
 function sortThisLastnameAZ(lastnameA, lastnameB) {
   if (lastnameA.lastName < lastnameB.lastName) {
     return -1;
@@ -167,7 +162,7 @@ function sortThisLastnameAZ(lastnameA, lastnameB) {
   }
 }
 
-//sorts by lastName z-a
+//Lastname from z-a
 function sortThisLastnameZA(lastnameA, lastnameB) {
   if (lastnameA.lastName < lastnameB.lastName) {
     return 1;
@@ -176,7 +171,7 @@ function sortThisLastnameZA(lastnameA, lastnameB) {
   }
 }
 
-//sorts by house a-z
+//House from a-z
 function sortThisHouseAZ(houseA, houseB) {
   if (houseA.house < houseB.house) {
     return -1;
@@ -185,7 +180,7 @@ function sortThisHouseAZ(houseA, houseB) {
   }
 }
 
-//sorts by house z-a
+//House sorted from z-a
 function sortThisHouseZA(houseA, houseB) {
   if (houseA.house < houseB.house) {
     return 1;
@@ -205,15 +200,10 @@ async function loadJSON() {
   const response = await fetch(url);
   const studentJSON = await response.json();
 
-  // console.log(studentJSON);
-
   prepareObjects(studentJSON);
 }
 
 function prepareObjects(studentJSON) {
-  // console.log(studentObjects);
-  // console.log(studentJSON);
-
   studentJSON.forEach((jsonObject) => {
     const student = Object.create(Student);
     let name = jsonObject.fullname.trim().toLowerCase();
@@ -239,9 +229,31 @@ function prepareObjects(studentJSON) {
 
     //Lastname
     const lastSpace = jsonObject.fullname.lastIndexOf(" ");
-    let lastName = name.substring(lastSpace).trim();
-    student.lastName =
-      lastName.substring(0, 1).toUpperCase() + lastName.substring(1);
+    student.lastName = name.substring(lastSpace).trim();
+    // student.lastName =
+    //   lastName.substring(0, 1).toUpperCase() + lastName.substring(1);
+
+    // Removes to avoid Leanne two times
+    if (lastSpace == -1) {
+      student.lastName = "";
+    }
+
+    //Registering hyphen
+    let hyphen = student.lastName.indexOf("-");
+
+    if (hyphen == -1) {
+      student.lastName =
+        student.lastName.substring(0, 1).toUpperCase() +
+        student.lastName.substring(1).toLowerCase();
+    } else {
+      student.lastName =
+        //First part of lastname being cleansed
+        student.lastName.substring(0, 1).toUpperCase() +
+        student.lastName.substring(1, hyphen).toLowerCase() +
+        //Last part of lastname being cleansed
+        student.lastName.substring(hyphen, hyphen + 2).toUpperCase() +
+        student.lastName.substring(hyphen + 2).toLowerCase();
+    }
 
     //Nickname
     if (name.includes(`"`)) {
@@ -265,8 +277,6 @@ function prepareObjects(studentJSON) {
     student.house = house.substring(0, 1).toUpperCase() + house.substring(1);
     // console.log(student.house);
 
-    // studentObjects.push(student);
-
     //Image
     student.image =
       student.lastName.toLowerCase() +
@@ -276,10 +286,34 @@ function prepareObjects(studentJSON) {
     if (student.lastName == "Patil") {
       student.image =
         student.lastName.toLowerCase() + "_" + splitName[0].toLowerCase();
+    } else if (hyphen) {
+      student.image =
+        student.lastName.substring(hyphen + 1).toLowerCase() +
+        `_${student.firstName.substring(0, 1).toLowerCase()}`;
     }
 
-    // console.log(student.image);
+    loadBloodJSON();
+
+    async function loadBloodJSON() {
+      const response = await fetch(bloodUrl);
+      const studentBloodJSON = await response.json();
+      student.bloodStatus = checkBloodStatus(studentBloodJSON);
+
+      checkBloodStatus(studentBloodJSON);
+    }
+
+    function checkBloodStatus(studentBloodJSON) {
+      if (studentBloodJSON.pure.includes(student.lastName) == true) {
+        return "Pureblood";
+      } else if (studentBloodJSON.half.includes(student.lastName) == true) {
+        return "Halfblood";
+      } else {
+        return "Muggle-born";
+      }
+    }
+
     allStudents.push(student);
+    // console.log(allStudents);
   });
 
   displayList(allStudents);
@@ -295,25 +329,44 @@ function displayList(studentObjects) {
     const template = document.querySelector("#student");
     let klon = template.cloneNode(true).content;
 
+    if (student.house == "Slytherin") {
+      klon.querySelector("li").style.border = "3px solid #1a472a";
+    }
+
+    if (student.house == "Gryffindor") {
+      klon.querySelector("li").style.border = "3px solid #740001";
+    }
+
+    if (student.house == "Ravenclaw") {
+      klon.querySelector("li").style.border = "3px solid #0e1a40";
+    }
+
+    if (student.house == "Hufflepuff") {
+      klon.querySelector("li").style.border = "3px solid #ecb939";
+    }
+
     klon.querySelector(
       ".firstName"
-    ).textContent = `FIRSTNAME: ${student.firstName}`;
+    ).textContent = `${student.firstName} ${student.nickName} ${student.middleName} ${student.lastName}`;
+    // klon.querySelector(
+    //   ".firstName"
+    // ).textContent = `FIRSTNAME: ${student.firstName}`;
 
-    klon.querySelector(
-      ".middleName"
-    ).textContent = `MIDDLENAME: ${student.middleName}`;
+    // klon.querySelector(
+    //   ".middleName"
+    // ).textContent = `MIDDLENAME: ${student.middleName}`;
 
-    klon.querySelector(
-      ".lastName"
-    ).textContent = `LASTNAME: ${student.lastName}`;
+    // klon.querySelector(
+    //   ".lastName"
+    // ).textContent = `LASTNAME: ${student.lastName}`;
 
-    klon.querySelector(
-      ".nickName"
-    ).textContent = `NICKNAME: ${student.nickName}`;
+    // klon.querySelector(
+    //   ".nickName"
+    // ).textContent = `NICKNAME: ${student.nickName}`;
 
-    klon.querySelector(".gender").textContent = `GENDER: ${student.gender}`;
+    // klon.querySelector(".gender").textContent = `GENDER: ${student.gender}`;
 
-    klon.querySelector(".house").textContent = `HOUSE: ${student.house}`;
+    klon.querySelector(".house").textContent = student.house;
     // console.log(student.house);
 
     klon.querySelector(".image").src = `/images/${student.image}.png`;
@@ -325,32 +378,31 @@ function displayList(studentObjects) {
   });
 
   function showDetails(student) {
+    // let span = document.createElement("span");
     console.log("clicked", student);
 
     const popup = document.querySelector("#popup");
     popup.style.display = "block";
 
     popup.querySelector(
-      ".firstName"
-    ).textContent = `FIRSTNAME: ${student.firstName}`;
+      ".fullName"
+    ).textContent = `${student.firstName} ${student.nickName} ${student.middleName} ${student.lastName}`;
 
-    popup.querySelector(
-      ".middleName"
-    ).textContent = `MIDDLENAME: ${student.middleName}`;
+    popup.querySelector(".firstName").textContent = student.firstName;
 
-    popup.querySelector(
-      ".lastName"
-    ).textContent = `LASTNAME: ${student.lastName}`;
+    popup.querySelector(".nickName").textContent = student.nickName;
 
-    popup.querySelector(
-      ".nickName"
-    ).textContent = `NICKNAME: ${student.nickName}`;
+    popup.querySelector(".middleName").textContent = student.middleName;
 
-    popup.querySelector(".gender").textContent = `GENDER: ${student.gender}`;
+    popup.querySelector(".lastName").textContent = student.lastName;
 
-    popup.querySelector(".house").textContent = `HOUSE: ${student.house}`;
+    popup.querySelector(".gender").textContent = student.gender;
 
-    // popup.querySelector(".image").src = `/images/${student.image}.png`;
+    popup.querySelector(".house").textContent = student.house;
+
+    popup.querySelector(".image").src = `/images/${student.image}.png`;
+
+    popup.querySelector(".blood").textContent = student.bloodStatus;
 
     document
       .querySelector("#luk")

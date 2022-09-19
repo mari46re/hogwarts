@@ -51,6 +51,16 @@
                 <p class="category">Blood-status:</p>
                  <p class="blood"></p>
               </div>
+
+              <div class="category-flex">
+                <p class="category">School-status:</p>
+                 <p class="scool-status"></p>
+              </div>
+              <div class="category-flex">
+                <p class="category">Prefect:</p>
+                 <p class="prefect"></p>
+              </div>
+
             </div>
           </div>
         </article>
@@ -107,6 +117,32 @@
       </div>
     </main>
 
+    <div id="remove_other" class="modal hide">
+      <div class="dialog">
+        <button class="close">X</button>
+        <h1>Warning!</h1>
+        <p>
+          There can only bee one prefect from each house! <br />
+          Do you want to remove the other prefect?
+        </p>
+        <button id="remove_other_btn">Remove the other</button>
+      </div>
+    </div>
+
+    <div id="remove_aorb" class="modal hide">
+      <div class="dialog">
+        <div class="close">&#x2715</div>        <h1>Warning!</h1>
+        <p>
+          There can not be anymore than two prefects. <br />
+          Do you want to remove one of the existing prefects?
+        </p>
+        <div class="sidebyside">
+          <button id="removea">Remove <span data-field="prefectA">a</span></button>
+          <button id="removeb">Remove <span data-field="prefectB">b</span></button>
+        </div>
+      </div>
+    </div>
+
     <script src="script.js"></script>
   </body>
 
@@ -120,6 +156,10 @@
       <p class="nickName"></p>
       <p class="gender"></p> -->
       <p class="house"></p>
+      <div class="category-flex pop-up-buttons">
+        <button class="prefect">Make prefect</button>
+        <button class="expell">Expell</button>
+      </div>
     </li>
   </template>
 </html>

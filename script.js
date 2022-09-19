@@ -6,6 +6,7 @@ const bloodUrl = "https://petlatkea.dk/2021/hogwarts/families.json";
 const studentList = {};
 
 const Student = {
+  fullName: "",
   firstName: "",
   middleName: "",
   lastName: "",
@@ -13,8 +14,9 @@ const Student = {
   image: "",
   house: "",
   blood: "",
+  schoolstatus: true,
   prefect: false,
-  expelled: false,
+  // expelled: false,
 };
 
 let allStudents = [];
@@ -266,6 +268,11 @@ function prepareObjects(studentJSON) {
       student.middleName = "";
     }
 
+    //Fullname = Navn sammensat
+
+    student.fullName = `
+    ${student.firstName} ${student.nickName} ${student.middleName} ${student.lastName}`;
+    console.log(student.fullName);
     // console.log(student.nickName);
 
     //Gender
@@ -312,6 +319,8 @@ function prepareObjects(studentJSON) {
       }
     }
 
+    student.prefect = false;
+
     allStudents.push(student);
     // console.log(allStudents);
   });
@@ -345,9 +354,7 @@ function displayList(studentObjects) {
       klon.querySelector("li").style.border = "3px solid #ecb939";
     }
 
-    klon.querySelector(
-      ".firstName"
-    ).textContent = `${student.firstName} ${student.nickName} ${student.middleName} ${student.lastName}`;
+    klon.querySelector(".firstName").textContent = student.fullName;
     // klon.querySelector(
     //   ".firstName"
     // ).textContent = `FIRSTNAME: ${student.firstName}`;
@@ -371,42 +378,165 @@ function displayList(studentObjects) {
 
     klon.querySelector(".image").src = `/images/${student.image}.png`;
 
+    klon.querySelector(".prefect").addEventListener("click", clickPrefect);
+
+    function clickPrefect() {
+      if (student.prefect === true) {
+        student.prefect = false;
+      } else {
+        tryToMakeAPrefect(student);
+      }
+      buildList();
+    }
+
     klon
       .querySelector("li")
       .addEventListener("click", () => showDetails(student));
     studentList.appendChild(klon);
   });
+}
 
-  function showDetails(student) {
-    // let span = document.createElement("span");
-    console.log("clicked", student);
+function showDetails(student) {
+  // let span = document.createElement("span");
+  console.log("clicked", student);
 
-    const popup = document.querySelector("#popup");
-    popup.style.display = "block";
+  const popup = document.querySelector("#popup");
+  popup.style.display = "block";
 
-    popup.querySelector(
-      ".fullName"
-    ).textContent = `${student.firstName} ${student.nickName} ${student.middleName} ${student.lastName}`;
+  popup.querySelector(
+    ".fullName"
+  ).textContent = `${student.firstName} ${student.nickName} ${student.middleName} ${student.lastName}`;
 
-    popup.querySelector(".firstName").textContent = student.firstName;
+  popup.querySelector(".firstName").textContent = student.firstName;
 
-    popup.querySelector(".nickName").textContent = student.nickName;
+  popup.querySelector(".nickName").textContent = student.nickName;
 
-    popup.querySelector(".middleName").textContent = student.middleName;
+  popup.querySelector(".middleName").textContent = student.middleName;
 
-    popup.querySelector(".lastName").textContent = student.lastName;
+  popup.querySelector(".lastName").textContent = student.lastName;
 
-    popup.querySelector(".gender").textContent = student.gender;
+  popup.querySelector(".gender").textContent = student.gender;
 
-    popup.querySelector(".house").textContent = student.house;
+  popup.querySelector(".house").textContent = student.house;
 
-    popup.querySelector(".image").src = `/images/${student.image}.png`;
+  popup.querySelector(".image").src = `/images/${student.image}.png`;
 
-    popup.querySelector(".blood").textContent = student.bloodStatus;
+  // popup.querySelector(".school-status").textContent = student.schoolstatus;
 
+  popup.querySelector(".blood").textContent = student.bloodStatus;
+
+  document
+    .querySelector("#luk")
+    .addEventListener("click", () => (popup.style.display = "none"));
+  popup.addEventListener("click", () => (popup.style.display = "none"));
+}
+
+function tryToMakeAPrefect(selectedstudent) {
+  const prefects = allStudents.filter((student) => student.prefect);
+
+  const numberOfPrefects = prefects.length;
+  const other = prefects
+    .filter((student) => student.prefect === selectedstudent.prefect)
+    .shift();
+
+  if (other !== undefined) {
+    console.log("There can only be 1 prefect from each house");
+    removeOther(other);
+  } else if (numberOfPrefects >= 2) {
+    console.log("There can only be 2 prefects!");
+    removeAorB(prefects[0], prefects[1]);
+  } else {
+    makePrefect(selectedstudent);
+  }
+
+  makePrefect(selectedstudent);
+
+  function removeOther(other) {
+    //Ask user to ignore or remove other
+    document.querySelector("#remove_other").classList.remove("hide");
     document
-      .querySelector("#luk")
-      .addEventListener("click", () => (popup.style.display = "none"));
-    popup.addEventListener("click", () => (popup.style.display = "none"));
+      .querySelector("#remove_other .close")
+      .addEventListener("click", closeDialog);
+    document
+      .querySelector("#remove_other #remove_other_btn")
+      .addEventListener("click", clickRemoveOther);
+
+    function closeDialog() {
+      document.querySelector("#remove_other").classList.add("hide");
+
+      document
+        .querySelector("#remove_other .close")
+        .removeEventListener("click", closeDialog);
+      document
+        .querySelector("#remove_other #remove_other_btn")
+        .removeEventListener("click", clickRemoveOther);
+    }
+
+    //if remove other:
+    function clickRemoveOther() {
+      removePrefect(other);
+      makePrefect(selectedstudent);
+      buildList();
+      closeDialog();
+    }
+    //if ignore, do something..
+  }
+
+  function removeAorB(prefectA, prefectB) {
+    document.querySelector("#remove_aorb").classList.remove("hide");
+    document
+      .querySelector("#remove_aorb .close")
+      .addEventListener("click", closeDialog);
+    document
+      .querySelector("#remove_aorb #removea")
+      .addEventListener("click", clickRemoveA);
+    document
+      .querySelector("#remove_aorb #removeb")
+      .addEventListener("click", clickRemoveB);
+
+    //Show names on buttons
+    document.querySelector("#remove_aorb [data-field=prefectA]").textContent =
+      prefectA.fullName;
+    document.querySelector("#remove_aorb [data-field=prefectB]").textContent =
+      prefectB.fullName;
+
+    function closeDialog() {
+      document.querySelector("#remove_aorb").classList.add("hide");
+      document
+        .querySelector("#remove_aorb .close")
+        .removeEventListener("click", closeDialog);
+      document
+        .querySelector("#remove_aorb #removea")
+        .removeEventListener("click", clickRemoveA);
+      document
+        .querySelector("#remove_aorb #removeb")
+        .removeEventListener("click", clickRemoveB);
+    }
+
+    function clickRemoveA() {
+      //if removeA:
+      removePrefect(prefectA);
+      makePrefect(selectedstudent);
+      buildList();
+      closeDialog();
+    }
+
+    function clickRemoveB() {
+      //else - if removeB
+      removePrefect(prefectB);
+      makePrefect(selectedstudent);
+      buildList();
+      closeDialog();
+    }
+    //Ask user to ignorre orr removie a orr b
+    //if ignoree - do nothing
+  }
+
+  function removePrefect(prefectStudent) {
+    prefectStudent.prefect = false;
+  }
+
+  function makePrefect(student) {
+    student.prefect = true;
   }
 }

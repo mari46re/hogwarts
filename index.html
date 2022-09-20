@@ -54,11 +54,11 @@
 
               <div class="category-flex">
                 <p class="category">School-status:</p>
-                 <p class="scool-status"></p>
+                 <p class="school-status">Attending</p>
               </div>
               <div class="category-flex">
                 <p class="category">Prefect:</p>
-                 <p class="prefect"></p>
+                 <p class="prefect">Is not a prefect</p>
               </div>
 
             </div>
@@ -67,7 +67,10 @@
       </aside>
       <h1>Hogwarts Studentlist</h1>
       <div class="list-grid">
+
+
         <div class="buttons">
+
           <h2 class="filter">FILTER:</h2>
           <button class="filter" data-action="filter" data-filter="all">
             ALL
@@ -100,10 +103,24 @@
           >
             SLYTHERIN
           </button>
+          <button
+          class="expell-filter"
+          data-action="filter"
+          data-filter="expell"
+        >
+          EXPELLED
+        </button>
+        <button
+        class="prefect-filter"
+        data-action="filter"
+        data-filter="prefect"
+      >
+        PREFECTS
+      </button>
           <h2 class="sort">SORT:</h2>
           <div class="sorter">
             <select name="sortingList" id="sortingList">
-              <option>SORT HERE</option>
+              <option>SORT STUDENTS</option>
               <option value="firstnamea-z">Firstname A-Z</option>
               <option value="firstnamez-a">Firstname Z-A</option>
               <option value="lastnamea-z">Lastname A-Z</option>
@@ -113,13 +130,18 @@
             </select>
           </div>
         </div>
-        <ul id="list"></ul>
-      </div>
+        <div>
+          <div class="category-flex">
+            <p class="student-number">Students shown: <span class="number-of-students">34</span></p>
+            <input class="search" type="search" placeholder="Search for student..."/>
+        </div>
+          <ul id="list"></ul></div>
+        </div>
     </main>
 
     <div id="remove_other" class="modal hide">
       <div class="dialog">
-        <button class="close">X</button>
+        <button class="close">&#x2715</button>
         <h1>Warning!</h1>
         <p>
           There can only bee one prefect from each house! <br />

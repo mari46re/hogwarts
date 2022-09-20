@@ -67,7 +67,8 @@ li .firstName {
   margin-top: 1em;
 }
 
-li .house {
+.student-number,
+.search {
   margin-top: 0.5em;
   margin-bottom: 1em;
 }
@@ -139,13 +140,9 @@ select {
   color: white;
 }
 
-.category {
+.category,
+.number-of-students {
   font-weight: bold;
-}
-
-.category-flex {
-  display: flex;
-  justify-content: space-between;
 }
 
 .pop-up-buttons {
@@ -235,6 +232,11 @@ button.close {
 
   .category-flex p {
     margin-top: 0.5rem;
+  }
+
+  .category-flex {
+    display: flex;
+    justify-content: space-between;
   }
 }
 

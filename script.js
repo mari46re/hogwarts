@@ -20,6 +20,7 @@ const Student = {
 };
 
 let allStudents = [];
+let expelledStudents = [];
 
 let filter;
 let filteredStudents = [];
@@ -45,6 +46,22 @@ async function init() {
   await loadJSON();
 }
 
+document.querySelector(".search").addEventListener("keyup", (e) => {
+  console.log("search");
+  let searchString = e.target.value;
+  searchString = searchString.toLowerCase();
+  const filterStudents = allStudents.filter((student) => {
+    return (
+      student.firstName.toLowerCase().includes(searchString) ||
+      student.lastName.toLowerCase().includes(searchString) ||
+      student.house.toLowerCase().includes(searchString)
+    );
+  });
+  document.querySelector(".number-of-students").textContent =
+    filterStudents.length;
+  displayList(filterStudents);
+});
+
 function filterButtonClicked(filterButton) {
   console.log("filter-button clicked");
 
@@ -55,6 +72,7 @@ function filterButtonClicked(filterButton) {
   displayList(filteredStudents);
 }
 
+//Hvis students house er SLYTHERIN
 function isSlytherin(student) {
   if (student.house === "Slytherin") {
     return true;
@@ -62,6 +80,7 @@ function isSlytherin(student) {
   return false;
 }
 
+//Hvis students house er HUFFLEPUFF
 function isHufflepuff(student) {
   if (student.house === "Hufflepuff") {
     return true;
@@ -69,6 +88,7 @@ function isHufflepuff(student) {
   return false;
 }
 
+//Hvis students house er GRYFFINDOR
 function isGryffindor(student) {
   if (student.house === "Gryffindor") {
     return true;
@@ -76,6 +96,7 @@ function isGryffindor(student) {
   return false;
 }
 
+//Hvis students house er RAVENCLAW
 function isRavenclaw(student) {
   if (student.house === "Ravenclaw") {
     return true;
@@ -83,6 +104,7 @@ function isRavenclaw(student) {
   return false;
 }
 
+//Hvis ALLE students er valgt
 function ifStudentAll(student) {
   console.log("ifStudentAll");
   if (student) {
@@ -93,7 +115,7 @@ function ifStudentAll(student) {
 }
 
 function filterStudents() {
-  console.log("Filtering students from this house:", filter);
+  console.log("Filtering students from this:", filter);
 
   filteredStudents = [];
 
@@ -105,9 +127,14 @@ function filterStudents() {
     filteredStudents = allStudents.filter(isHufflepuff);
   } else if (filter === "gryffindor") {
     filteredStudents = allStudents.filter(isGryffindor);
+  } else if (filter === "expell") {
+    filteredStudents = expelledStudents;
   } else {
     filteredStudents = allStudents.filter(ifStudentAll);
   }
+
+  document.querySelector(".number-of-students").textContent =
+    filteredStudents.length;
 
   return filteredStudents;
 }
@@ -272,7 +299,7 @@ function prepareObjects(studentJSON) {
 
     student.fullName = `
     ${student.firstName} ${student.nickName} ${student.middleName} ${student.lastName}`;
-    console.log(student.fullName);
+    // console.log(student.fullName);
     // console.log(student.nickName);
 
     //Gender
@@ -379,10 +406,24 @@ function displayList(studentObjects) {
     klon.querySelector(".image").src = `/images/${student.image}.png`;
 
     klon.querySelector(".prefect").addEventListener("click", clickPrefect);
+    klon.querySelector(".expell").addEventListener("click", clickExpell);
+
+    function clickExpell() {
+      if (student.schoolstatus === false) {
+        student.schoolstatus = true;
+        document.querySelector(".school-status").textContent = "Attending";
+      } else {
+        expellStudent(student);
+      }
+
+      buildList();
+    }
 
     function clickPrefect() {
       if (student.prefect === true) {
         student.prefect = false;
+        document.querySelector("#popup .prefect").textContent =
+          "Is not a prefect";
       } else {
         tryToMakeAPrefect(student);
       }
@@ -431,6 +472,18 @@ function showDetails(student) {
   popup.addEventListener("click", () => (popup.style.display = "none"));
 }
 
+function expellStudent(selectedStudent) {
+  if (selectedStudent.schoolstatus === true) {
+    console.log(selectedStudent);
+    allStudents.splice(allStudents.indexOf(selectedStudent), 1);
+    selectedStudent.schoolstatus = false;
+    selectedStudent.prefect = false;
+    document.querySelector(".school-status").textContent = "EXPELLED!";
+    expelledStudents.push(selectedStudent);
+  }
+  buildList();
+}
+
 function tryToMakeAPrefect(selectedstudent) {
   const prefects = allStudents.filter((student) => student.prefect);
 
@@ -438,6 +491,8 @@ function tryToMakeAPrefect(selectedstudent) {
   const other = prefects
     .filter((student) => student.prefect === selectedstudent.prefect)
     .shift();
+
+  document.querySelector("#popup .prefect").textContent = "Is a prefect";
 
   if (other !== undefined) {
     console.log("There can only be 1 prefect from each house");
@@ -533,6 +588,8 @@ function tryToMakeAPrefect(selectedstudent) {
   }
 
   function removePrefect(prefectStudent) {
+    document.querySelector("#popup .prefect").textContent = "Is a not prefect";
+
     prefectStudent.prefect = false;
   }
 

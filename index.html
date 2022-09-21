@@ -25,42 +25,42 @@
             <div class="info">
               <div class="category-flex">
                 <p class="category">Firstname:</p>
-                <p class="firstName"></p>
+                <p class="firstName right"></p>
               </div>
               <div class="category-flex">
                 <p class="category">Middlename:</p>
-                <p class="middleName"></p>
+                <p class="middleName right"></p>
               </div>
               <div class="category-flex">
                 <p class="category">Nickname:</p>
-                <p class="nickName"></p>
+                <p class="nickName right"></p>
               </div>
               <div class="category-flex">
                 <p class="category">Lastname:</p>
-                <p class="lastName"></p>
+                <p class="lastName right"></p>
               </div>
               <div class="category-flex">
                 <p class="category">Gender:</p> 
-                <p class="gender"></p>
+                <p class="gender right"></p>
               </div>
               <div class="category-flex">
                 <p class="category">House:</p>
-                 <p class="house"></p>
+                 <p class="house right"></p>
               </div>
               <div class="category-flex">
                 <p class="category">Blood-status:</p>
-                 <p class="blood"></p>
+                 <p class="blood right"></p>
               </div>
 
               <div class="category-flex">
                 <p class="category">School-status:</p>
-                 <p class="school-status">Attending</p>
+                 <p class="school-status right">Attending</p>
               </div>
               <div class="category-flex">
                 <p class="category">Prefect:</p>
-                 <p class="prefect">Is not a prefect</p>
+                 <p class="prefect right">Is not a prefect</p>
               </div>
-
+              <button class="inq-btn">Add to Inquisitorial Squad</button>
             </div>
           </div>
         </article>
@@ -141,10 +141,10 @@
 
     <div id="remove_other" class="modal hide">
       <div class="dialog">
-        <button class="close">&#x2715</button>
+        <div class="close">&#x2715</div>
         <h1>Warning!</h1>
         <p>
-          There can only bee one prefect from each house! <br />
+          There can only be one prefect from each house! <br />
           Do you want to remove the other prefect?
         </p>
         <button id="remove_other_btn">Remove the other</button>
@@ -171,16 +171,17 @@
   <template id="student">
     <li>
       <!-- Jeg vil kun vise billede og navn, og gemme resten i popup  -->
-      <img class="image" src="" alt="" />
+      <img class="image li-image" src="" alt="" />
       <h3 class="firstName"></h3>
       <!-- <p class="middleName"></p>
       <p class="lastName"></p>
       <p class="nickName"></p>
       <p class="gender"></p> -->
-      <p class="house"></p>
-      <div class="category-flex pop-up-buttons">
-        <button class="prefect">Make prefect</button>
-        <button class="expell">Expell</button>
+      <p class="house"></p>      
+      <h2 class="expelled hide">EXPELLED</h2>
+      <div class="flex-buttons pop-up-buttons">
+        <button class="prefect-btn">Make prefect</button>
+        <button class="expell-btn">Expell</button>
       </div>
     </li>
   </template>

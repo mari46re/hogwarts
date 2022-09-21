@@ -25,20 +25,18 @@ h3,
 select,
 button {
   font-family: obliqua, sans-serif;
-
   font-weight: 700;
-
   font-style: normal;
 }
 
 p,
-li {
+li,
+input {
   font-family: obliqua, sans-serif;
-
   font-weight: 400;
-
   font-style: normal;
 }
+
 .list-grid {
   display: grid;
   grid-template-columns: 1fr 3fr;
@@ -149,9 +147,13 @@ select {
   gap: 20px;
 }
 
-.prefect,
-.expell {
+.prefect-btn,
+.expell-btn {
   font-size: 0.7em;
+}
+
+.expelled {
+  color: red;
 }
 
 .hide {
@@ -188,6 +190,20 @@ button.close {
 
 .dialog h1 {
   margin-top: 0;
+}
+
+.category-flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.right {
+  text-align: right;
+}
+
+#popup article {
+  height: 80%;
+  box-shadow: 1px 1px 10px rgb(22, 21, 21);
 }
 
 @media (min-width: 700px) {
@@ -234,7 +250,7 @@ button.close {
     margin-top: 0.5rem;
   }
 
-  .category-flex {
+  .flex-buttons {
     display: flex;
     justify-content: space-between;
   }
@@ -261,17 +277,24 @@ button.close {
     height: 30px;
   }
 
+  .inq-btn {
+    align-self: center;
+    width: 200px;
+  }
   .sort {
     margin-top: 1rem;
   }
 
   #popup article {
     padding: 1rem;
-    border: 1px solid rgb(255, 255, 255);
-    height: 80%;
   }
 
   #popup article .image {
     margin-top: 2em;
+  }
+
+  #popup p {
+    font-size: 0.8em;
+    margin-bottom: 0.4em;
   }
 }

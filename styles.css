@@ -29,6 +29,10 @@ button {
   font-style: normal;
 }
 
+.fullName {
+  color: rgb(251, 248, 233);
+}
+
 p,
 li,
 input {
@@ -71,7 +75,8 @@ li .firstName {
   margin-bottom: 1em;
 }
 /***Teksten i drop-down-menuen skal centreres***/
-select {
+select,
+.img-container {
   text-align: center;
 }
 
@@ -100,6 +105,7 @@ aside article {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: 10px;
 }
 
 #luk {
@@ -273,14 +279,13 @@ button.close {
   button,
   select {
     margin-top: 0.5rem;
-    /* margin-left: 1rem; */
     width: 100px;
     height: 30px;
   }
 
   .inq-btn {
-    align-self: center;
     width: 200px;
+    font-size: 0.7em;
   }
   .sort {
     margin-top: 1rem;
@@ -297,5 +302,9 @@ button.close {
   #popup p {
     font-size: 0.8em;
     margin-bottom: 0.4em;
+  }
+
+  #popup article {
+    height: 88%;
   }
 }

@@ -459,12 +459,18 @@ function displayList(studentObjects) {
     //Hvis student er PREFECT, tilføjes en stjerne på Li-element
     if (student.prefect === true) {
       klon.querySelector(".firstName").textContent = student.fullName + " 🌟";
+      klon.querySelector(".prefect-btn").textContent = "Remove prefect";
     }
 
     //Hvis student er EXPELLED, grayscales billede samt hide fjernes fra DOM-element
     if (student.schoolstatus === false) {
       klon.querySelector(".image").style.filter = "grayscale()";
+      klon.querySelector(".expelled").style.paddingTop = "0.5em";
+
       klon.querySelector(".expelled").classList.remove("hide");
+      klon.querySelector(".expell-btn").remove();
+      klon.querySelector(".prefect-btn").remove();
+
       student.inq = false;
       student.prefect = false;
     }
@@ -480,11 +486,30 @@ function displayList(studentObjects) {
 }
 
 function showDetails(student) {
-  // let span = document.createElement("span");
   console.log("clicked", student);
 
   const popup = document.querySelector("#popup");
   popup.style.display = "block";
+
+  if (student.house == "Slytherin") {
+    popup.querySelector(".img-container").style.backgroundColor = "#1a472a";
+    popup.querySelector(".img-container").style.margin = "1em";
+  }
+
+  if (student.house == "Gryffindor") {
+    popup.querySelector(".img-container").style.backgroundColor = "#740001";
+    popup.querySelector(".img-container").style.margin = "1em";
+  }
+
+  if (student.house == "Ravenclaw") {
+    popup.querySelector(".img-container").style.backgroundColor = "#0e1a40";
+    popup.querySelector(".img-container").style.margin = "1em";
+  }
+
+  if (student.house == "Hufflepuff") {
+    popup.querySelector(".img-container").style.backgroundColor = "#ecb939";
+    popup.querySelector(".img-container").style.margin = "1em";
+  }
 
   popup.querySelector(
     ".fullName"
@@ -553,13 +578,17 @@ function showDetails(student) {
 
   //TEKSTINDHOLD i POPUP ændrer is ift. om man er medlem af EXPELLED eller ej
   if (student.schoolstatus === false) {
+    popup.querySelector(".inq-btn").classList.add("hide");
     popup.querySelector(".school-status").textContent =
       "THIS STUDENT IS EXPELLED";
+    popup.querySelector(".school-status").style.color = "red";
     document.querySelector("#student .expell-btn").removeEventListener("click");
     student.inq = false;
     student.prefect = false;
   } else {
+    popup.querySelector(".school-status").style.color = "#372e29";
     popup.querySelector(".school-status").textContent = "Attending at Hogwarts";
+    popup.querySelector(".inq-btn").classList.remove("hide");
   }
 }
 

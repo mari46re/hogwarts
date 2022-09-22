@@ -21,6 +21,7 @@ const Student = {
 
 let allStudents = [];
 let expelledStudents = [];
+// let prefectStudents = [];
 
 let filter;
 let filteredStudents = [];
@@ -114,6 +115,20 @@ function ifStudentAll(student) {
   }
 }
 
+function isPrefect(student) {
+  if (student.prefect === true) {
+    return true;
+  }
+  return false;
+}
+
+function isInq(student) {
+  if (student.inq === true) {
+    return true;
+  }
+  return false;
+}
+
 function filterStudents() {
   console.log("Filtering students from this:", filter);
 
@@ -127,8 +142,14 @@ function filterStudents() {
     filteredStudents = allStudents.filter(isHufflepuff);
   } else if (filter === "gryffindor") {
     filteredStudents = allStudents.filter(isGryffindor);
+  } else if (filter === "prefect") {
+    filteredStudents = allStudents.filter(isPrefect);
+  } else if (filter === "inq") {
+    filteredStudents = allStudents.filter(isInq);
   } else if (filter === "expell") {
     filteredStudents = expelledStudents;
+
+    // document.querySelector("#student .expell-btn").classList.add("hide");
   } else {
     filteredStudents = allStudents.filter(ifStudentAll);
   }
@@ -407,11 +428,10 @@ function displayList(studentObjects) {
 
     klon.querySelector(".image").src = `/images/${student.image}.png`;
 
-    klon.querySelector(".prefect-btn").addEventListener("click", clickPrefect);
     klon.querySelector(".expell-btn").addEventListener("click", clickExpell);
-
     function clickExpell() {
       if (student.schoolstatus === false) {
+        //Toggle
         student.schoolstatus = true;
         document.querySelector(".school-status").textContent = "Attending";
       } else {
@@ -421,18 +441,40 @@ function displayList(studentObjects) {
       buildList();
     }
 
+    klon.querySelector(".prefect-btn").addEventListener("click", clickPrefect);
     function clickPrefect() {
-      if (student.prefect === true) {
-        student.prefect = false;
+      //Dette kan kun lade sig gøre, hvis den studerende IKKE er expelled
+      if (student.schoolstatus === true) {
+        if (student.prefect === true) {
+          student.prefect = false;
+        } else {
+          tryToMakeAPrefect(student);
+        }
       } else {
-        tryToMakeAPrefect(student);
+        alert("This student is expelled and cannot become a prefect!");
       }
       buildList();
     }
 
+    //Hvis student er PREFECT, tilføjes en stjerne på Li-element
+    if (student.prefect === true) {
+      klon.querySelector(".firstName").textContent = student.fullName + " 🌟";
+    }
+
+    //Hvis student er EXPELLED, grayscales billede samt hide fjernes fra DOM-element
+    if (student.schoolstatus === false) {
+      klon.querySelector(".image").style.filter = "grayscale()";
+      klon.querySelector(".expelled").classList.remove("hide");
+      student.inq = false;
+      student.prefect = false;
+    }
+
+    //Når der klikkes på Li-element, åbnes et popup
     klon
       .querySelector("li")
       .addEventListener("click", () => showDetails(student));
+
+    //Studentlisten skal appende alt klon-data
     studentList.appendChild(klon);
   });
 }
@@ -465,49 +507,59 @@ function showDetails(student) {
   popup.querySelector(".blood").textContent = student.bloodStatus;
 
   popup.querySelector(".inq-btn").addEventListener("click", clickInq);
+
+  //Når der klikkes på "Add to inq..."
   function clickInq() {
-    if (student.inq == true) student.inq = false;
-    {
-      if (
-        student.house === "Slytherin" ||
-        student.bloodStatus === "Pureblood"
-      ) {
-        makeInq(student);
-      } else {
+    //Dette kan kun lade sig gøre, hvis student går på skolen og er PUREBLOOD eller SLYTHERIN
+    if (
+      (student.schoolstatus == true && student.house === "Slytherin") ||
+      student.bloodStatus === "Pureblood"
+    ) {
+      //TOGGLE -- Hvis man toggler, væksler man mlm. at være medlem el. ej
+      if (student.inq === true) {
         student.inq = false;
-        alert("This student isn't suited to join the inquisitorial squad!");
+      } else {
+        makeInq(student);
       }
+    }
+    //Lever man ikke op til kriterierne om Inq, vil en ALERT poppe op!
+    else {
+      student.inq = false;
+      alert("This student isn't suited to join the inquisitorial squad!");
     }
   }
 
+  //Uanset om man trykker på kryds el. andet sted på popup'en, lukker det ned
   document
     .querySelector("#luk")
     .addEventListener("click", () => (popup.style.display = "none"));
   popup.addEventListener("click", () => (popup.style.display = "none"));
 
+  //TEKSTINDHOLD ændrer is ift. om man er medlem af INQ eller ej
+  if (student.inq === true) {
+    popup.querySelector(".inq").textContent = "Is a member";
+  } else {
+    popup.querySelector(".inq").textContent = "Is not a member";
+  }
+
+  //TEKSTINDHOLD i POPUP ændrer is ift. om man er medlem af PREFECT eller ej
   if (student.prefect === true) {
     popup.querySelector(".prefect").textContent = "Is a prefect";
-    popup.querySelector(".firstName").textContent = student.fullName + "📍";
-  } else if (student.prefect === false) {
+    //Stjerne tilføjes fullname, ligesom på Li-element
+    popup.querySelector(".fullName").textContent = student.fullName + " 🌟";
+  } else {
     popup.querySelector(".prefect").textContent = "Is a not prefect";
   }
 
+  //TEKSTINDHOLD i POPUP ændrer is ift. om man er medlem af EXPELLED eller ej
   if (student.schoolstatus === false) {
     popup.querySelector(".school-status").textContent =
       "THIS STUDENT IS EXPELLED";
     document.querySelector("#student .expell-btn").removeEventListener("click");
-    document
-      .querySelector("#student .prefect-btn")
-      .removeEventListener("click");
-
-    document.querySelector("#popup .inq-btn").removeEventListener("click");
     student.inq = false;
-
-    // document.querySelector(".li-image").style.filter = "grayscale()";
-    // document.querySelector(".expelled").classList.remove("hide");
-  } else if (student.schoolstatus === true) {
+    student.prefect = false;
+  } else {
     popup.querySelector(".school-status").textContent = "Attending at Hogwarts";
-    // document.querySelector(".expelled").classList.add("hide");
   }
 }
 
@@ -532,55 +584,17 @@ function expellStudent(selectedStudent) {
 function tryToMakeAPrefect(selectedstudent) {
   const prefects = allStudents.filter((student) => student.prefect);
 
-  const numberOfPrefects = prefects.length;
-  const other = prefects
-    .filter((student) => student.house === selectedstudent.house)
-    .shift();
+  const other = prefects.filter(
+    (student) => student.house === selectedstudent.house
+  );
 
-  if (other !== undefined) {
-    console.log("There can only be 1 prefect from each house");
-    removeOther(other);
-  } else if (numberOfPrefects >= 2) {
-    console.log("There can only be 2 prefects!");
-    removeAorB(prefects[0], prefects[1]);
+  if (other.length >= 2) {
+    removeAorB(other[0], other[1]);
   } else {
     makePrefect(selectedstudent);
   }
 
-  makePrefect(selectedstudent);
-
-  function removeOther(other) {
-    //Ask user to ignore or remove other
-    document.querySelector("#remove_other").classList.remove("hide");
-    document
-      .querySelector("#remove_other .close")
-      .addEventListener("click", closeDialog);
-    document
-      .querySelector("#remove_other #remove_other_btn")
-      .addEventListener("click", clickRemoveOther);
-
-    function closeDialog() {
-      document.querySelector("#remove_other").classList.add("hide");
-
-      document
-        .querySelector("#remove_other .close")
-        .removeEventListener("click", closeDialog);
-      document
-        .querySelector("#remove_other #remove_other_btn")
-        .removeEventListener("click", clickRemoveOther);
-    }
-
-    //if remove other:
-    function clickRemoveOther() {
-      removePrefect(other);
-      makePrefect(selectedstudent);
-      buildList();
-      closeDialog();
-    }
-    //if ignore, do something..
-  }
-
-  function removeAorB(prefectA, prefectB) {
+  function removeAorB(otherA, otherB) {
     document.querySelector("#remove_aorb").classList.remove("hide");
     document
       .querySelector("#remove_aorb .close")
@@ -594,9 +608,9 @@ function tryToMakeAPrefect(selectedstudent) {
 
     //Show names on buttons
     document.querySelector("#remove_aorb [data-field=prefectA]").textContent =
-      prefectA.fullName;
+      otherA.fullName;
     document.querySelector("#remove_aorb [data-field=prefectB]").textContent =
-      prefectB.fullName;
+      otherB.fullName;
 
     function closeDialog() {
       document.querySelector("#remove_aorb").classList.add("hide");
@@ -613,7 +627,7 @@ function tryToMakeAPrefect(selectedstudent) {
 
     function clickRemoveA() {
       //if removeA:
-      removePrefect(prefectA);
+      removePrefect(otherA);
       makePrefect(selectedstudent);
       buildList();
       closeDialog();
@@ -621,13 +635,11 @@ function tryToMakeAPrefect(selectedstudent) {
 
     function clickRemoveB() {
       //else - if removeB
-      removePrefect(prefectB);
+      removePrefect(otherB);
       makePrefect(selectedstudent);
       buildList();
       closeDialog();
     }
-    //Ask user to ignore or remove a or b
-    //if ignoree - do nothing
   }
 
   function removePrefect(prefectStudent) {
@@ -636,11 +648,6 @@ function tryToMakeAPrefect(selectedstudent) {
 
   function makePrefect(selectedstudent) {
     selectedstudent.prefect = true;
-
-    //HVIS en student er EXPELLED, kan man IKKE blive en prefect
-    if (selectedstudent.schoolstatus === false) {
-      selectedstudent.prefect = false;
-      alert("This student is expelled, and cannot be a prefect!");
-    }
+    // prefectStudents.push(selectedstudent);
   }
 }

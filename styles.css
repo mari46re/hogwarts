@@ -246,8 +246,8 @@ button.close {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-right: 40%;
-    margin-left: 10%;
+    margin-right: 25%;
+    margin-left: 20%;
   }
   .img-container img {
     height: 160px;
@@ -260,6 +260,15 @@ button.close {
   .flex-buttons {
     display: flex;
     justify-content: space-between;
+  }
+
+  .buttons {
+    margin-right: 1rem;
+  }
+
+  .inq-btn {
+    height: 10%;
+    width: 100%;
   }
 }
 

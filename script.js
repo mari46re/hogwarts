@@ -254,17 +254,10 @@ function hackTheSystem() {
 
   document.querySelector("#hack").removeEventListener("click", hackTheSystem);
 
-  setTimeout(hackDelay, 1000);
-  // console.log(setTimeout(hackDelay, 1000));
-}
-
-function hackDelay() {
   addMe();
   isHacked = true;
   if (isHacked === true) {
     document.querySelector("body").style.backgroundColor = "rgb(0, 255, 85)";
-  } else if (isHacked === false) {
-    document.querySelector("body").style.backgroundColor = "rgb(251, 248, 233)";
   }
   hackBlood();
 }
@@ -471,23 +464,6 @@ function displayList(studentObjects) {
     }
 
     klon.querySelector(".firstName").textContent = student.fullName;
-    // klon.querySelector(
-    //   ".firstName"
-    // ).textContent = `FIRSTNAME: ${student.firstName}`;
-
-    // klon.querySelector(
-    //   ".middleName"
-    // ).textContent = `MIDDLENAME: ${student.middleName}`;
-
-    // klon.querySelector(
-    //   ".lastName"
-    // ).textContent = `LASTNAME: ${student.lastName}`;
-
-    // klon.querySelector(
-    //   ".nickName"
-    // ).textContent = `NICKNAME: ${student.nickName}`;
-
-    // klon.querySelector(".gender").textContent = `GENDER: ${student.gender}`;
 
     klon.querySelector(".house").textContent = student.house;
     // console.log(student.house);
@@ -496,6 +472,10 @@ function displayList(studentObjects) {
 
     klon.querySelector(".expell-btn").addEventListener("click", clickExpell);
     function clickExpell() {
+      document
+        .querySelector(".expell-btn")
+        .removeEventListener("click", clickExpell);
+
       if (isHacked === true && student.firstName === "Marikka") {
         alert("EXPELLING ME??? Are you NUTS! THAT AIN'T NEVA HAPPENIN'!!!!");
       } else {
@@ -513,6 +493,9 @@ function displayList(studentObjects) {
 
     klon.querySelector(".prefect-btn").addEventListener("click", clickPrefect);
     function clickPrefect() {
+      document
+        .querySelector(".prefect-btn")
+        .removeEventListener("click", clickPrefect);
       //Dette kan kun lade sig gøre, hvis den studerende IKKE er expelled
       if (student.schoolstatus === true) {
         if (student.prefect === true) {
@@ -527,12 +510,15 @@ function displayList(studentObjects) {
     }
 
     //Hvis student er PREFECT, tilføjes en stjerne på Li-element
-    if (student.prefect === true) {
+
+    if (student.prefect === true && student.inq === true) {
+      klon.querySelector(".firstName").textContent =
+        student.fullName + " 🌟 🎖 ";
+      klon.querySelector(".prefect-btn").textContent = "Remove prefect";
+    } else if (student.prefect === true) {
       klon.querySelector(".firstName").textContent = student.fullName + " 🌟";
       klon.querySelector(".prefect-btn").textContent = "Remove prefect";
-    }
-
-    if (student.inq === true) {
+    } else if (student.inq === true) {
       klon.querySelector(".firstName").textContent = student.fullName + "🎖";
     }
 
@@ -560,6 +546,8 @@ function displayList(studentObjects) {
 }
 
 function showDetails(student) {
+  document.querySelector("li").removeEventListener("click", showDetails);
+
   console.log("clicked", student);
 
   const popup = document.querySelector("#popup");
@@ -609,7 +597,7 @@ function showDetails(student) {
 
   //Når der klikkes på "Add to inq..."
   function clickInq() {
-    popup.querySelector(".inq-btn").removeEventListener("click", clickInq);
+    document.querySelector(".inq-btn").removeEventListener("click", clickInq);
 
     //Dette kan kun lade sig gøre, hvis student går på skolen og er PUREBLOOD eller SLYTHERIN
     if (student.schoolstatus === true) {
@@ -662,7 +650,6 @@ function showDetails(student) {
     popup.querySelector(".school-status").textContent =
       "THIS STUDENT IS EXPELLED";
     popup.querySelector(".school-status").style.color = "red";
-    document.querySelector("#student .expell-btn").removeEventListener("click");
     student.inq = false;
     student.prefect = false;
   } else {
@@ -673,7 +660,6 @@ function showDetails(student) {
 }
 
 function makeInq(chosenStudent) {
-  // document.querySelector(".inq-btn").removeEventListener("click");
   chosenStudent.inq = true;
 }
 
@@ -727,16 +713,13 @@ function tryToMakeAPrefect(selectedstudent) {
       document
         .querySelector("#remove_aorb .close")
         .removeEventListener("click", closeDialog);
-      document
-        .querySelector("#remove_aorb #removea")
-        .removeEventListener("click", clickRemoveA);
-      document
-        .querySelector("#remove_aorb #removeb")
-        .removeEventListener("click", clickRemoveB);
     }
 
     function clickRemoveA() {
       //if removeA:
+      document
+        .querySelector("#remove_aorb #removea")
+        .removeEventListener("click", clickRemoveA);
       removePrefect(prefectA);
       makePrefect(selectedstudent);
       buildList();
@@ -745,6 +728,9 @@ function tryToMakeAPrefect(selectedstudent) {
 
     function clickRemoveB() {
       //else - if removeB
+      document
+        .querySelector("#remove_aorb #removeb")
+        .removeEventListener("click", clickRemoveB);
       removePrefect(prefectB);
       makePrefect(selectedstudent);
       buildList();

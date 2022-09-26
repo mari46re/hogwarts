@@ -567,22 +567,22 @@ function showDetails(student) {
 
   if (student.house == "Slytherin") {
     popup.querySelector(".img-container").style.backgroundColor = "#1a472a";
-    popup.querySelector(".img-container").style.margin = "1em";
+    popup.querySelector(".crest").src = "images/slytherin.png";
   }
 
   if (student.house == "Gryffindor") {
     popup.querySelector(".img-container").style.backgroundColor = "#740001";
-    popup.querySelector(".img-container").style.margin = "1em";
+    popup.querySelector(".crest").src = "images/gryffindor.png";
   }
 
   if (student.house == "Ravenclaw") {
     popup.querySelector(".img-container").style.backgroundColor = "#0e1a40";
-    popup.querySelector(".img-container").style.margin = "1em";
+    popup.querySelector(".crest").src = "images/ravenclaw.png";
   }
 
   if (student.house == "Hufflepuff") {
     popup.querySelector(".img-container").style.backgroundColor = "#ecb939";
-    popup.querySelector(".img-container").style.margin = "1em";
+    popup.querySelector(".crest").src = "images/hufflepuff.png";
   }
 
   popup.querySelector(
@@ -694,17 +694,17 @@ function expellStudent(selectedStudent) {
 function tryToMakeAPrefect(selectedstudent) {
   const prefects = allStudents.filter((student) => student.prefect);
 
-  const other = prefects.filter(
+  const prefect = prefects.filter(
     (student) => student.house === selectedstudent.house
   );
 
-  if (other.length >= 2) {
-    removeAorB(other[0], other[1]);
+  if (prefect.length >= 2) {
+    removeAorB(prefect[0], prefect[1]);
   } else {
     makePrefect(selectedstudent);
   }
 
-  function removeAorB(otherA, otherB) {
+  function removeAorB(prefectA, prefectB) {
     document.querySelector("#remove_aorb").classList.remove("hide");
     document
       .querySelector("#remove_aorb .close")
@@ -718,9 +718,9 @@ function tryToMakeAPrefect(selectedstudent) {
 
     //Show names on buttons
     document.querySelector("#remove_aorb [data-field=prefectA]").textContent =
-      otherA.fullName;
+      prefectA.fullName;
     document.querySelector("#remove_aorb [data-field=prefectB]").textContent =
-      otherB.fullName;
+      prefectB.fullName;
 
     function closeDialog() {
       document.querySelector("#remove_aorb").classList.add("hide");
@@ -737,7 +737,7 @@ function tryToMakeAPrefect(selectedstudent) {
 
     function clickRemoveA() {
       //if removeA:
-      removePrefect(otherA);
+      removePrefect(prefectA);
       makePrefect(selectedstudent);
       buildList();
       closeDialog();
@@ -745,7 +745,7 @@ function tryToMakeAPrefect(selectedstudent) {
 
     function clickRemoveB() {
       //else - if removeB
-      removePrefect(otherB);
+      removePrefect(prefectB);
       makePrefect(selectedstudent);
       buildList();
       closeDialog();

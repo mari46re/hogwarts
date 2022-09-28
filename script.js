@@ -591,10 +591,19 @@ function showDetails(student) {
     if (student.house === "Slytherin" || student.bloodStatus === "Pureblood") {
       if (isHacked === true) {
         student.inq = true;
-        setTimeout(removeInq, 2000);
+        setTimeout(removeInq, 1000);
+        popup.querySelector(".fullName").textContent = student.fullName + "🎖";
+        popup.querySelector(".inq").textContent = "Is a member";
+        popup.querySelector(".inq-btn").textContent =
+          "Remove from Inquisitorial Squad";
 
         function removeInq() {
           student.inq = false;
+          alert("WOOPPSSSII, u got removed buddy!!!");
+          popup.querySelector(".fullName").textContent = student.fullName;
+          // popup.querySelector(".inq").textContent = "Is not a member";
+          popup.querySelector(".inq-btn").textContent =
+            "Add to inquisitorial squad";
           popup.querySelector(".inq").textContent = "Is not a member";
         }
       } else if (student.inq === true) {

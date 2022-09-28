@@ -361,6 +361,10 @@ function prepareObjects(studentJSON) {
         student.lastName.substring(hyphen + 2).toLowerCase();
     }
 
+    if (student.firstName === "Seamus") {
+      student.lastName = "Finnigan";
+    }
+
     //Nickname
     if (name.includes(`"`)) {
       let nickName = name
@@ -397,6 +401,10 @@ function prepareObjects(studentJSON) {
       student.image =
         student.lastName.substring(hyphen + 1).toLowerCase() +
         `_${student.firstName.substring(0, 1).toLowerCase()}`;
+    }
+
+    if (student.firstName == "Leanne") {
+      student.image = "missing_student";
     }
 
     loadBloodJSON();
@@ -615,17 +623,11 @@ function showDetails(student) {
     } else {
       document.querySelector(".inq").textContent = "Is not a member";
       popup.querySelector(".fullName").textContent = student.fullName;
-      // document.querySelector(".inq-btn").removeEventListener("click", clickInq);
       //Lever man ikke op til kriterierne om Inq, vil en ALERT poppe op!
       student.inq = false;
       alert("This student isn't suited to join the inquisitorial squad!");
     }
   }
-
-  // popup.addEventListener("click", () => {
-  //   popup.style.display = "none";
-  //   document.querySelector(".inq-btn").removeEventListener("click", clickInq);
-  // });
 
   //Uanset om man trykker på kryds el. andet sted på popup'en, lukker det ned
   document.querySelector("#luk").addEventListener("click", () => {

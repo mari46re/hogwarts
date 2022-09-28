@@ -21,13 +21,10 @@ const Student = {
 
 let allStudents = [];
 let expelledStudents = [];
-
 let filter;
 let filteredStudents = [];
 let filterButtons;
-
 let sortThis;
-
 let isHacked = false;
 
 window.addEventListener("DOMContentLoaded", init);
@@ -49,7 +46,7 @@ async function init() {
 
   await loadJSON();
 }
-
+/*-------------------SØGEFUNKTITON------------------------*/
 document.querySelector(".search").addEventListener("keyup", (e) => {
   console.log("search");
   let searchString = e.target.value;
@@ -65,7 +62,7 @@ document.querySelector(".search").addEventListener("keyup", (e) => {
     filterStudents.length;
   displayList(filterStudents);
 });
-
+/*-------------------FILTRERING------------------------*/
 function filterButtonClicked(filterButton) {
   console.log("filter-button clicked");
 
@@ -163,6 +160,7 @@ function isInq(student) {
   return false;
 }
 
+/*-------------------SORTERING------------------------*/
 function selectedSorting(event) {
   sortThis = event;
   buildList();
@@ -248,6 +246,7 @@ function buildList() {
   displayList(currentList);
 }
 
+/*-------------------HACKING------------------------*/
 function hackTheSystem(student) {
   alert("YOU'RE BEING HACKED NOW, YEEEEEHAAWWW");
 
@@ -306,6 +305,7 @@ function createMe() {
   return me;
 }
 
+/*-------------------FETCH STUDENT JSON------------------------*/
 async function loadJSON() {
   const response = await fetch(url);
   const studentJSON = await response.json();
@@ -313,6 +313,7 @@ async function loadJSON() {
   prepareObjects(studentJSON);
 }
 
+/*-------------------KLARGØR DATA------------------------*/
 function prepareObjects(studentJSON) {
   studentJSON.forEach((jsonObject) => {
     const student = Object.create(Student);
@@ -406,6 +407,7 @@ function prepareObjects(studentJSON) {
     if (student.firstName == "Leanne") {
       student.image = "missing_student";
     }
+    /*-------------------FETCH BLOOD-DATA------------------------*/
 
     loadBloodJSON();
 
@@ -438,6 +440,7 @@ function prepareObjects(studentJSON) {
   displayList(allStudents);
 }
 
+/*-------------------VIEW: VIS STUDENTS------------------------*/
 function displayList(studentObjects) {
   // clear the list
   document.querySelector("#list").innerHTML = "";
@@ -465,6 +468,7 @@ function displayList(studentObjects) {
     klon.querySelector(".house").textContent = student.house;
     klon.querySelector(".image").src = `/images/${student.image}.png`;
 
+    /*-------------------EXPELL 1------------------------*/
     klon.querySelector(".expell-btn").addEventListener("click", clickExpell);
     function clickExpell() {
       document
@@ -472,7 +476,7 @@ function displayList(studentObjects) {
         .removeEventListener("click", clickExpell);
 
       if (isHacked === true && student.firstName === "Marikka") {
-        alert("EXPELLING ME??? Are you NUTS! THAT AIN'T NEVA HAPPENIN'!!!!");
+        alert("EXPELLING ME??? Are you NUTS! THAT AIN'T NEVA GON' HAPPN'!!!!");
       } else {
         if (student.schoolstatus === false) {
           //Toggle
@@ -486,6 +490,7 @@ function displayList(studentObjects) {
       buildList();
     }
 
+    /*-------------------PREFECT 1------------------------*/
     klon.querySelector(".prefect-btn").addEventListener("click", clickPrefect);
     function clickPrefect() {
       document
@@ -503,19 +508,6 @@ function displayList(studentObjects) {
       }
       buildList();
     }
-
-    //Hvis student er PREFECT, tilføjes en stjerne på Li-element
-
-    // if (student.prefect === true && student.inq === true) {
-    //   klon.querySelector(".firstName").textContent =
-    //     student.fullName + " 🌟 🎖 ";
-    //   klon.querySelector(".prefect-btn").textContent = "Remove prefect";
-    // } else if (student.prefect === true) {
-    //   klon.querySelector(".firstName").textContent = student.fullName + " 🌟";
-    //   klon.querySelector(".prefect-btn").textContent = "Remove prefect";
-    // } else if (student.inq === true) {
-    //   klon.querySelector(".firstName").textContent = student.fullName + "🎖";
-    // }
 
     //Hvis student er EXPELLED, grayscales billede samt hide fjernes fra DOM-element
     if (student.schoolstatus === false) {
@@ -539,6 +531,7 @@ function displayList(studentObjects) {
   });
 }
 
+/*-------------------POPUP------------------------*/
 function showDetails(student) {
   document.querySelector("li").removeEventListener("click", showDetails);
 
@@ -559,6 +552,7 @@ function showDetails(student) {
 
   popup.style.display = "block";
 
+  /*-------------------POPUP I HUSENES FARVER------------------------*/
   if (student.house == "Slytherin") {
     popup.querySelector(".img-container").style.backgroundColor = "#1a472a";
     popup.querySelector(".crest").src = "images/slytherin.png";
@@ -592,6 +586,7 @@ function showDetails(student) {
   popup.querySelector(".blood").textContent = student.bloodStatus;
   popup.querySelector(".inq-btn").addEventListener("click", clickInq);
 
+  /*-------------------INQUISITORIAL SQUAD------------------------*/
   //Når der klikkes på "Add to inq..."
   function clickInq() {
     //Dette kan kun lade sig gøre, hvis student går på skolen og er PUREBLOOD eller SLYTHERIN
@@ -629,6 +624,7 @@ function showDetails(student) {
     }
   }
 
+  /*-------------------LUK POPUP------------------------*/
   //Uanset om man trykker på kryds el. andet sted på popup'en, lukker det ned
   document.querySelector("#luk").addEventListener("click", () => {
     popup.style.display = "none";
@@ -668,6 +664,7 @@ function showDetails(student) {
   }
 }
 
+/*-------------------EXPELL 2------------------------*/
 function expellStudent(selectedStudent) {
   if (selectedStudent.schoolstatus === true) {
     console.log(selectedStudent);
@@ -681,6 +678,7 @@ function expellStudent(selectedStudent) {
   buildList();
 }
 
+/*-------------------PREFECT 2------------------------*/
 function tryToMakeAPrefect(selectedstudent) {
   const prefects = allStudents.filter((student) => student.prefect);
 

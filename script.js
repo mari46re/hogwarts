@@ -466,7 +466,7 @@ function displayList(studentObjects) {
 
     klon.querySelector(".firstName").textContent = student.fullName;
     klon.querySelector(".house").textContent = student.house;
-    klon.querySelector(".image").src = `/images/${student.image}.png`;
+    klon.querySelector(".image").src = `images/${student.image}.png`;
 
     /*-------------------EXPELL 1------------------------*/
     klon.querySelector(".expell-btn").addEventListener("click", clickExpell);
@@ -582,7 +582,7 @@ function showDetails(student) {
   popup.querySelector(".lastName").textContent = student.lastName;
   popup.querySelector(".gender").textContent = student.gender;
   popup.querySelector(".house").textContent = student.house;
-  popup.querySelector(".image").src = `/images/${student.image}.png`;
+  popup.querySelector(".image").src = `images/${student.image}.png`;
   popup.querySelector(".blood").textContent = student.bloodStatus;
   popup.querySelector(".inq-btn").addEventListener("click", clickInq);
 
